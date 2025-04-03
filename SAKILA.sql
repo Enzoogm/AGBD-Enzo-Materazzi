@@ -1,4 +1,5 @@
                         --Ejercicio 1--
+
 SELECT film.title, address.address, city.city, country.country
 FROM rental
 JOIN inventory ON rental.inventory_id = inventory.inventory_id
@@ -54,4 +55,75 @@ INNER JOIN staff on store.manager_staff_id = staff.staff_id
 INNER JOIN address on customer.address_id = address.address_id
 INNER JOIN city on address.city_id = city.city_id
 INNER JOIN country on city.country_id = country.country_id
+
+                        --Ejercicio 6--
+
+SELECT film.rating, COUNT(film.film_id) AS total_peliculas
+FROM film
+GROUP BY film.rating
+ORDER BY total_peliculas DESC;
+
+                        --Ejercicio 7--
+
+SELECT c.name AS categoria, COUNT(f.film_id) AS Cantidad_Pelis
+FROM category c
+JOIN film_category fc ON c.category_id = fc.category_id
+JOIN film f ON fc.film_id = f.film_id
+GROUP BY c.name;
+
+                        --Ejercicio 8--
+
+SELECT a.first_name, a.last_name, COUNT(fa.film_id) AS CAntidad_Peliculas
+FROM actor a
+JOIN film_actor fa ON a.actor_id = fa.actor_id
+GROUP BY a.actor_id
+ORDER BY CAntidad_Peliculas DESC
+LIMIT 10; ----
+                        
+                        --Ejercicio 9--
+
+SELECT a.address, c.city, co.country, COUNT(i.inventory_id) AS Ejemplares
+FROM inventory i
+JOIN store s ON i.store_id = s.store_id
+JOIN address a ON s.address_id = a.address_id
+JOIN city c ON a.city_id = c.city_id
+JOIN country co ON c.country_id = co.country_id
+GROUP BY a.address, c.city, co.country;
+
+                        --Ejercicio 10--
+
+SELECT a.address, c.city, co.country, COUNT(DISTINCT i.film_id) AS Total_de_Peliculas
+FROM inventory i
+JOIN store s ON i.store_id = s.store_id
+JOIN address a ON s.address_id = a.address_id
+JOIN city c ON a.city_id = c.city_id
+JOIN country co ON c.country_id = co.country_id
+GROUP BY a.address, c.city, co.country;
+
+
+                        --Ejercicio 11--
+                        
+SELECT c.name AS categoria, AVG(f.rental_rate) AS costo_promedio
+FROM category c
+JOIN film_category fc ON c.category_id = fc.category_id
+JOIN film f ON fc.film_id = f.film_id
+GROUP BY c.name;
+
+
+                        --Ejercicio 12--
+
+SELECT 
+    r.rental_date, 
+    r.return_date, 
+    (JULIANDAY(r.return_date) - JULIANDAY(r.rental_date)) AS dias_alquiler,
+    f.rental_rate * (JULIANDAY(r.return_date) - JULIANDAY(r.rental_date)) AS costo_total,
+    f.rental_rate AS costo_por_dia
+FROM rental r
+JOIN inventory i ON r.inventory_id = i.inventory_id
+JOIN film f ON i.film_id = f.film_id
+WHERE f.title = 'ALABAMA DEVIL'
+ORDER BY r.rental_date;
+
+
+
 
