@@ -125,5 +125,74 @@ WHERE f.title = 'ALABAMA DEVIL'
 ORDER BY r.rental_date;
 
 
+                        --Ejercicio 13--
+SELECT 
+    f.title AS nombre_pelicula,
+    f.length AS duracion,
+    c.name AS categoria
+FROM film f
+JOIN film_category fc ON f.film_id = fc.film_id
+JOIN category c ON fc.category_id = c.category_id
+ORDER BY f.length DESC;
+
+                        --Ejercicio 14--
+
+SELECT 
+    f.title AS nombre_pelicula,
+    COUNT(fa.actor_id) AS cantidad_actores
+FROM film f
+JOIN film_actor fa ON f.film_id = fa.film_id
+WHERE f.title LIKE 'W%'
+GROUP BY f.film_id, f.title
+HAVING COUNT(fa.actor_id) >= 5;
+
+                        --Ejercicio 15--
+SELECT 
+    c.first_name AS nombre_cliente,
+    c.last_name AS apellido_cliente,
+    SUM(p.amount) AS total_pagado
+FROM customer c
+JOIN payment p ON c.customer_id = p.customer_id
+GROUP BY c.customer_id, c.first_name, c.last_name
+ORDER BY total_pagado DESC;
+
+                        --Ejercicio 16--
+
+SELECT 
+    f.title AS nombre_pelicula,
+    f.length AS duracion,
+    a.first_name AS nombre_actor,
+    a.last_name AS apellido_actor
+FROM film f
+JOIN film_actor fa ON f.film_id = fa.film_id
+JOIN actor a ON fa.actor_id = a.actor_id
+WHERE f.length = (
+    SELECT MIN(length) FROM film
+)
+ORDER BY f.title, a.first_name;
+
+                        --Ejercicio 17--
+SELECT 
+    c.last_name AS apellido_cliente,
+    a.address AS direccion,
+    ci.city AS ciudad,
+    co.country AS pais,
+    COUNT(DISTINCT r.rental_id) AS cantidad_alquileres,
+    SUM(p.amount) AS total_pagado
+FROM customer c
+JOIN address a ON c.address_id = a.address_id
+JOIN city ci ON a.city_id = ci.city_id
+JOIN country co ON ci.country_id = co.country_id
+LEFT JOIN rental r ON c.customer_id = r.customer_id
+LEFT JOIN payment p ON c.customer_id = p.customer_id
+GROUP BY c.customer_id, c.last_name, a.address, ci.city, co.country
+ORDER BY total_pagado ASC;
+
+                        --Ejercicio 18--
 
 
+                        --Ejercicio 19--
+
+                        --Ejercicio 20--
+
+                        --Ejercicio 21--
